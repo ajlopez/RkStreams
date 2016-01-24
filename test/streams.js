@@ -36,3 +36,26 @@ exports['post three messages to stream'] = function (test) {
     stream.post(2);
     stream.post(3);
 };
+
+exports['map stream'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream = rks.stream();
+    
+    stream.map(function (x) { return x * 2; }).process(function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter * 2);
+        
+        if (data === 6)
+            test.done();
+    });
+    
+    stream.post(1);
+    stream.post(2);
+    stream.post(3);
+};
+
