@@ -37,6 +37,28 @@ exports['post three messages to stream'] = function (test) {
     stream.post(3);
 };
 
+exports['chaining processes'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream = rks.stream();
+    
+    stream.process(function (data) {
+        counter++;
+    }).process(function (data) {
+        test.ok(data);
+        test.equal(data, counter);
+        
+        if (data === 3)
+            test.done();
+    });
+    
+    stream.post(1);
+    stream.post(2);
+    stream.post(3);
+};
+
 exports['map stream'] = function (test) {
     test.async();
     
