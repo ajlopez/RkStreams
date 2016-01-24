@@ -59,3 +59,21 @@ exports['map stream'] = function (test) {
     stream.post(3);
 };
 
+exports['filter stream'] = function (test) {
+    test.async();
+    
+    var stream = rks.stream();
+    
+    stream
+        .filter(function (x) { return x % 2 === 0})
+        .filter(function (x) { return x % 5 === 0})
+        .process(function (data) {
+            test.ok(data);
+            test.equal(data, 10);
+            test.done();
+        });
+    
+    for (var k = 1; k <= 10; k++)
+        stream.post(k);
+};
+
