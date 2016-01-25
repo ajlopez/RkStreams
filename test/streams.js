@@ -37,6 +37,30 @@ exports['post three messages to stream'] = function (test) {
     stream.post(3);
 };
 
+exports['post three messages to streams and merge'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream1 = rks.stream();
+    var stream2 = rks.stream();
+    
+    stream1.merge(stream2)
+        .process(function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter);
+        
+        if (data === 3)
+            test.done();
+    });
+    
+    stream1.post(1);
+    stream2.post(2);
+    stream1.post(3);
+};
+
 exports['chaining processes'] = function (test) {
     test.async();
     
