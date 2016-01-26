@@ -37,6 +37,34 @@ exports['post three messages to stream'] = function (test) {
     stream.post(3);
 };
 
+exports['selective processes using constants'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream = rks.stream();
+    
+    stream.process(1, function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter);
+        test.equal(data, 1);
+    });
+    
+    stream.process(2, function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter);
+        test.equal(data, 2);
+        test.done();
+    });
+    
+    stream.post(1);
+    stream.post(2);
+};
+
 exports['post three messages to streams and merge'] = function (test) {
     test.async();
     
