@@ -65,6 +65,34 @@ exports['selective processes using constants'] = function (test) {
     stream.post(2);
 };
 
+exports['selective processes using predicates'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream = rks.stream();
+    
+    stream.process(function (data) { return data === 1; }, function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter);
+        test.equal(data, 1);
+    });
+    
+    stream.process(function (data) { return data === 2; }, function (data) {
+        counter++;
+        
+        test.ok(data);
+        test.equal(data, counter);
+        test.equal(data, 2);
+        test.done();
+    });
+    
+    stream.post(1);
+    stream.post(2);
+};
+
 exports['post three messages to streams and merge'] = function (test) {
     test.async();
     
