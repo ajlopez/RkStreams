@@ -117,6 +117,35 @@ exports['post three messages to streams and merge'] = function (test) {
     stream1.post(3);
 };
 
+exports['post a message with branch'] = function (test) {
+    test.async();
+    
+    var counter = 0;
+    
+    var stream1 = rks.stream();
+    var stream2 = rks.stream();
+    
+    stream1.branch(stream2);
+    
+    stream1.process(function (data) {
+        counter++;
+        
+        test.equal(data, 1);
+        test.equal(counter, 1);
+    });
+    
+    stream2.process(function (data) {
+        counter++;
+        
+        test.equal(data, 1);
+        test.equal(counter, 2);
+        
+        test.done();
+    });
+    
+    stream1.post(1);
+};
+
 exports['chaining processes'] = function (test) {
     test.async();
     
