@@ -208,3 +208,23 @@ exports['filter stream'] = function (test) {
         stream.post(k);
 };
 
+exports['scan stream using reducer'] = function (test) {
+    test.async();
+    
+    var stream = rks.stream();
+    var expected = [1, 3, 6, 10];
+    var counter = 0;
+    
+    stream
+        .scan(function (state, value) { return state + value; }, 0)
+        .process(function (data) {
+            test.ok(data);
+            test.equal(data, expected[counter++]);
+            
+            if (counter === 4)
+                test.done();
+        });
+    
+    for (var k = 1; k <= 4; k++)
+        stream.post(k);
+};
